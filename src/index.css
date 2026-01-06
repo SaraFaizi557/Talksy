@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Ceviche+One&family=Prosto+One&display=swap');
+@import "tailwindcss";
+
+.light {
+  --Background: #fafafa;
+  --Surface: #f9f9f9;
+  --Surface-light: #8383830d;
+  --Text: hsl(221, 39%, 11%);
+  --Muted: #6b728007;
+  --Border: #e5e7eb;
+  --Primary: #2563eb;
+  --Accent: #10b981;
+  --Trash: #eb4040f3;
+}
+
+.dark {
+  --Background: #070a12;
+  --Surface: #0f172a99;
+  --Surface-light: #363b4842;
+  --Text: #e6edff;
+  --Muted: #98a2b321;
+  --Border: #1b2440;
+  --Primary: #7c5cff;
+  --Accent: #22d3ee;
+  --Pink-highlight: #ff4da6;
+  --Trash: #cf4242f3;
+}
+
+:root {
+    --Ceviche-family: "Ceviche One", system-ui;
+    --Prosto-family: "Prosto One", sans-serif;
+}
+
+#text::-webkit-scrollbar {
+    display: none;
+}
+
+html, body, #root {
+  height: 100%;
+}
+body {
+  margin: 0;
+}
