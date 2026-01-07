@@ -71,17 +71,17 @@ const Main = () => {
   })();
 }, []);
 
-const deleteMessage = async (id) => {
-  const { error } = await supabase.from("messages").delete().eq("id", id);
+// const deleteMessage = async (id) => {
+//   const { error } = await supabase.from("messages").delete().eq("id", id);
 
-  if (error) {
-    console.error("Delete error:", error);
-    return;
-  }
+//   if (error) {
+//     console.error("Delete error:", error);
+//     return;
+//   }
 
-  // UI se bhi remove
-  setMessages((prev) => prev.filter((m) => m.id !== id));
-};
+//   // UI se bhi remove
+//   setMessages((prev) => prev.filter((m) => m.id !== id));
+// };
 
 
   return (
@@ -110,7 +110,7 @@ const deleteMessage = async (id) => {
                 <p className="text-(--Text) text-md">{m.text}</p>
               </div>
             </div>
-            <Trash2 onClick={() => deleteMessage(m.id)} className="absolute right-4 md:right-7 w-5 h-5 md:w-5 md:h-5 text-(--Trash) cursor-pointer mt-2" />
+            {/* <Trash2 onClick={() => deleteMessage(m.id)} className="absolute right-4 md:right-7 w-5 h-5 md:w-5 md:h-5 text-(--Trash) cursor-pointer mt-2" /> */}
           </div>
         ))}
         <div ref={bottomRef} />
