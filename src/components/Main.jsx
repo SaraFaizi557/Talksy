@@ -205,7 +205,17 @@ const Main = () => {
   };
 
   const cancelReply = () => setReplyTo(null);
-  
+
+  useEffect(() => {
+  (async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error("getUser error:", error);
+      return;
+    }
+    console.log("USER ID:", data?.user?.id);
+  })();
+}, []);
 
 
   return (
