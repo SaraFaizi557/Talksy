@@ -8,9 +8,9 @@ const Header = ({ setTheme, }) => {
   return (
     <div className="flex w-screen px-5 py-3 items-center justify-between border-b border-(--Border)">
       <div className="flex items-center gap-0 cursor-pointer [font-family:var(--Ceviche-family)]">
-        {logo.map(({ char, idx }) => (
-          <h1 key={idx} className="text-3xl md:text-4xl text-(--Primary) select-none hover:-translate-y-2 transition-all duration-200">
-            {char}
+        {logo.map((n) => (
+          <h1 key={n.id} className="text-3xl md:text-4xl text-(--Primary) select-none hover:-translate-y-2 transition-all duration-200">
+            {n.char}
           </h1>
         ))}
       </div>
