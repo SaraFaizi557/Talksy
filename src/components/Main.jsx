@@ -139,7 +139,8 @@ const Main = () => {
     (async () => {
       const { data, error } = await supabase
         .from("messages")
-        .select("id, text, created_at, user_id, user_name, avatar, profiles(display_name, avatar)")
+        .select("id, text, created_at, user_id, profiles(display_name, avatar)")
+
         .order("created_at", { ascending: true });
 
       if (error) {
