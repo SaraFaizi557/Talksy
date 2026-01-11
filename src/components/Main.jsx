@@ -9,7 +9,7 @@ const Main = () => {
   const [profilesMap, setProfilesMap] = useState({});
   const [myProfile, setMyProfile] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
-  const MY_ID = "654b4bef-12c4-458e-a859-45e03b226d79";
+  const MY_ID = "59a0bc07-c841-42a3-8bda-1f15dd0906e1";
 
   const teRef = useRef(null);
 
