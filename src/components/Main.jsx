@@ -9,7 +9,21 @@ const Main = () => {
   const [profilesMap, setProfilesMap] = useState({});
   const [myProfile, setMyProfile] = useState(null);
   const [replyTo, setReplyTo] = useState(null);
-  const MY_ID = "59a0bc07-c841-42a3-8bda-1f15dd0906e1";
+  const ADMIN_IDS = new Set([
+    "654b4bef-12c4-458e-a859-45e03b226d79",
+    "59a0bc07-c841-42a3-8bda-1f15dd0906e1",
+  ]);
+
+  const isAdmin = ADMIN_IDS.has(myId);
+
+  const displayName = isAdmin
+    ? "Sara"
+    : (myProfile?.display_name ?? (myId ? `Anonymous` : "Anonymous"));
+
+  const displayAvatar = isAdmin
+    ? "/assets/profile.jpg"
+    : (myProfile?.avatar ?? "/assets/user.jpg");
+
 
   const teRef = useRef(null);
 
@@ -51,8 +65,9 @@ const Main = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const user_name = myProfile?.display_name ?? `User-${user.id.slice(0, 5)}`;
-    const avatar = myProfile?.avatar ?? "/assets/user.jpg";
+    const user_name = displayName;
+    const avatar = displayAvatar;
+
 
     const { data, error } = await supabase
       .from("messages")
@@ -206,18 +221,6 @@ const Main = () => {
 
   const cancelReply = () => setReplyTo(null);
 
-  useEffect(() => {
-  (async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error("getUser error:", error);
-      return;
-    }
-    console.log("USER ID:", data?.user?.id);
-  })();
-}, []);
-
-
   return (
     <>
       <div
@@ -226,8 +229,9 @@ const Main = () => {
       >
         {messages.map((m) => {
 
-          const name = m.profiles?.display_name ?? "Anonymous";
+          const name = m.user_name ?? m.profiles?.display_name ?? "Anonymous";
           const avatar = m.avatar ?? m.profiles?.avatar ?? "/assets/user.jpg";
+
 
           return (
             <div key={m.id} className="group relative w-full flex px-4 md:px-7 justify-between hover:bg-(--Surface-light)">
@@ -252,7 +256,7 @@ const Main = () => {
               <div className="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 group-hover:-translate-y-2 flex items-center cursor-pointer -translate-y-3 justify-center gap-2 h-fit rounded-lg px-2 py-1 bg-(--Surface) border border-(--Border)">
                 <Smile fill="--Text" className="w-5 h-5 sm:w-5.5 sm:h-5.5 hover:scale-110 transition-all duration-100 rounded cursor-pointer text-(--Surface) fill-(--Text)" />
                 <Reply onClick={() => startReply(m)} className="w-5 h-5 sm:w-5.5 sm:h-5.5 hover:scale-110 hover:bg-(--Text)/6 transition-all duration-100 rounded text-(--Text)/70" />
-                {myId === MY_ID && <Trash2 onClick={() => deleteMessage(m.id)} className="w-4 h-4 sm:w-4.5 sm:h-4.5 hover:scale-110 hover:bg-(--Text)/6 transition-all duration-100 rounded text-(--Trash)" />}
+                {isAdmin && <Trash2 onClick={() => deleteMessage(m.id)} className="w-4 h-4 sm:w-4.5 sm:h-4.5 hover:scale-110 hover:bg-(--Text)/6 transition-all duration-100 rounded text-(--Trash)" />}
               </div>
             </div>
           )
@@ -261,32 +265,32 @@ const Main = () => {
       </div>
       <div className="w-screen text-white px-2 md:px-5 py-3 border-(--Border)">
         {replyTo && (
-            <div className="mb-1 w-full flex items-center justify-between rounded-lg bg-(--Surface) border border-(--Border) px-3 py-2">
-              <div className="min-w-0">
-                <p className="text-xs text-(--Text)/70">
-                  Replying to <span className="font-medium text-(--Text)">{replyTo.user_name}</span>
-                </p>
-                <p className="text-sm text-(--Text)/80 truncate">
-                  {replyTo.text}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={cancelReply}
-                className="px-2 text-(--Text)/70 hover:text-(--Text)"
-              >
-                ✕
-              </button>
+          <div className="mb-1 w-full flex items-center justify-between rounded-lg bg-(--Surface) border border-(--Border) px-3 py-2">
+            <div className="min-w-0">
+              <p className="text-xs text-(--Text)/70">
+                Replying to <span className="font-medium text-(--Text)">{replyTo.user_name}</span>
+              </p>
+              <p className="text-sm text-(--Text)/80 truncate">
+                {replyTo.text}
+              </p>
             </div>
-          )}
+
+            <button
+              type="button"
+              onClick={cancelReply}
+              className="px-2 text-(--Text)/70 hover:text-(--Text)"
+            >
+              ✕
+            </button>
+          </div>
+        )}
         <div className="w-full flex items-end gap-3 rounded-lg bg-(--Surface) px-3 py-3 md:py-4 border border-(--Border)">
           <MessageSquare
             size={25}
             fill="var(--Primary)"
             className="text-(--Primary) cursor-pointer"
           />
-        
+
           <textarea
             id="text"
             onKeyDown={(e) => {
